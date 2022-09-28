@@ -1,6 +1,7 @@
-import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit';
-import { rootReducer, RootState } from './rootReducer';
-import { openDatabase } from './database';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from './rootReducer';
+import { AwaitedDatabase, openDatabase } from './database';
+import { useDispatch } from 'react-redux';
 
 export const initialiseStore = () => {
     return configureStore({
@@ -8,13 +9,17 @@ export const initialiseStore = () => {
         devTools: process.env.NODE_ENV === 'development',
         middleware: getDefaultMiddleware => getDefaultMiddleware({
             thunk: {
-                extraArgument: openDatabase()
+                extraArgument: async () => {
+                    return openDatabase();
+                }
             }
         })
     });
 }
 
+export type DatabaseFetcher = () => AwaitedDatabase;
+
 export const store = initialiseStore();
 
 export type AppDispatch = typeof store.dispatch;
-export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
+export const useAppDispatch: () => AppDispatch = useDispatch;

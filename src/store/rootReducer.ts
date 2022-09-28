@@ -1,9 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { reducer as filesReducer } from './achievements/achievementsSlice';
+import { reducer as gamesReducer } from './gameSlice/gameSlice';
 
 export const rootReducer = combineReducers({
-    filesReducer
+    gamesReducer
 });
 export type RootState = ReturnType<typeof rootReducer>;
 export type RootStateHook = () => RootState;

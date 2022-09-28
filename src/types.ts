@@ -6,3 +6,4 @@ export interface Game {
     achievedAchievementCount: number;
     playtimeInMinutes: number;
 }
+export type Games = Game[];
