@@ -7,7 +7,6 @@ interface LoadedGames {
     games: Games
 }
 
-
 export const loadDataFromDatabase = createAsyncThunk('games/loadGames', async (
     _: undefined,
     config 
