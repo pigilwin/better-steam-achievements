@@ -17,10 +17,13 @@ export const Homepage = (): null | JSX.Element => {
         dispatch(loadConfigFromDatabase());
     }, [dispatch]);
 
-    if (credentialsAttempedToBeLoaded && !weHaveCredentials) {
-        navigate('/preferences');
-        return null;
-    }
+    useEffect(() => {
+        if (credentialsAttempedToBeLoaded && !weHaveCredentials) {
+            navigate('/preferences', {
+                replace: true
+            });
+        }
+    }, [credentialsAttempedToBeLoaded, weHaveCredentials]);
 
     return (
         <div></div>

@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import { Homepage } from './achievements/homepage';
+import { Preferences } from 'achievements/preferences';
 
 export const App = (): JSX.Element => {
   return (
@@ -12,6 +13,7 @@ export const App = (): JSX.Element => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homepage />} />
+          <Route path="/preferences" element={<Preferences />} />
         </Routes>
       </BrowserRouter>
     </main>
