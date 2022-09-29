@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store";
-import { hasCredentialsAttempedToBeLoaded, loadConfigFromDatabase } from "store/configurationSlice/configurationSlice";
+import { doWeHaveCredentialsSelector, hasCredentialsAttempedToBeLoadedSelector, loadConfigFromDatabase } from "store/configurationSlice/configurationSlice";
 import { loadDataFromDatabase } from "store/gameSlice/gameSlice";
 
 export const Homepage = (): null | JSX.Element => {
 
     const dispatch = useAppDispatch();
-    const credentialsAttempedToBeLoaded = useSelector(hasCredentialsAttempedToBeLoaded);
+    const credentialsAttempedToBeLoaded = useSelector(hasCredentialsAttempedToBeLoadedSelector);
+    const weHaveCredentials = useSelector(doWeHaveCredentialsSelector);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,7 +17,7 @@ export const Homepage = (): null | JSX.Element => {
         dispatch(loadConfigFromDatabase());
     }, [dispatch]);
 
-    if (credentialsAttempedToBeLoaded) {
+    if (credentialsAttempedToBeLoaded && !weHaveCredentials) {
         navigate('/preferences');
         return null;
     }

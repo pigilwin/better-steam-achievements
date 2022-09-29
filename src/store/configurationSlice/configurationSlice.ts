@@ -45,4 +45,8 @@ export const {
     loadConfig
 } = achievementsSlice.actions;
 
-export const hasCredentialsAttempedToBeLoaded = (state: RootState): boolean => state.configurationReducer.loaded; 
+export const hasCredentialsAttempedToBeLoadedSelector = (state: RootState): boolean => state.configurationReducer.loaded;
+export const doWeHaveCredentialsSelector = (state: RootState): boolean => {
+    const reducer = state.configurationReducer;
+    return reducer.steamApiKey.length > 0 && reducer.steamApiUserId.length > 0;
+};
