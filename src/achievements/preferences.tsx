@@ -66,7 +66,7 @@ export const Preferences = (): JSX.Element => {
                 <h1 className="text-center text-6xl">Configuration is required for this to work</h1>
                 <p>To find you steam user id, open your steam profile, copy the page url and paste it in the input below</p>
                 <Input onChangeHandler={onSteamUserIdChanged} placeholder="Steam User Id" />
-                <p>You can apply for an API key using <a className="text-blue-300" target="_blank" href="https://steamcommunity.com/dev/apikey">this</a> link</p>
+                <p>You can apply for an API key using <a className="text-blue-300" rel="noreferrer" target="_blank" href="https://steamcommunity.com/dev/apikey">this</a> link</p>
                 <Input onChangeHandler={onSteamApiKeyChanged} placeholder="Steam API Key" />
                 <StyledButton buttonText="Save Preferences" onClick={savePreferencesListener} />
             </a.div>

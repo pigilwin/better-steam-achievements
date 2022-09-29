@@ -23,7 +23,11 @@ export const Homepage = (): null | JSX.Element => {
                 replace: true
             });
         }
-    }, [credentialsAttempedToBeLoaded, weHaveCredentials]);
+    }, [
+        credentialsAttempedToBeLoaded,
+        weHaveCredentials,
+        navigate
+    ]);
 
     return (
         <div></div>
