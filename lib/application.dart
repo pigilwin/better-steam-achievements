@@ -1,5 +1,8 @@
+import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
+import 'package:better_steam_achievements/achievements/bloc/achievement_event.dart';
 import 'package:better_steam_achievements/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key});
@@ -7,14 +10,18 @@ class Application extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Better Steam Achievements',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-        useMaterial3: true,
+    return BlocProvider<AchievementBloc>(
+      create: (_) => AchievementBloc()..add(InitialiseAchievements()),
+      lazy: false,
+      child: MaterialApp.router(
+        title: 'Better Steam Achievements',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+          useMaterial3: true,
+        ),
+        routerConfig: ApplicationRouter.router(),
+        debugShowCheckedModeBanner: false,
       ),
-      routerConfig: ApplicationRouter.router(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
