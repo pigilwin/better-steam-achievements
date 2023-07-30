@@ -11,6 +11,14 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
   AchievementBloc(this._repository) : super(InitialAchievementState()) {
     on<InitialiseAchievements>((event, emit) async {
       final credentials = await _repository.getCredentials();
+
+      if (credentials.isEmpty) {
+        emit(ActiveAchievementState(credentials));
+      }
+
+      final games = await _repository.getGames(credentials);
+      print(games);
+
       emit(ActiveAchievementState(credentials));
     });
 
