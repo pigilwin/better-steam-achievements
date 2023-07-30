@@ -4,12 +4,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AchievementRepository {
   Future<Credentials> getCredentials() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (!sharedPreferences.containsKey('credentials')) {
+    final containsSteamId = sharedPreferences.containsKey('steamId');
+    final containsApiKey = sharedPreferences.containsKey('apiKey');
+
+    if (!containsApiKey || !containsSteamId) {
       return Credentials.empty();
     }
-    final data = sharedPreferences.get('credentials');
-    print(data);
-    return Credentials.empty();
-    //return Credentials(data['steamId'], data['steamApiKey']);
+    final id = sharedPreferences.getString('steamId')!;
+    final apiKey = sharedPreferences.getString('apiKey')!;
+    return Credentials(id, apiKey);
+  }
+
+  Future<void> saveCredentials(Credentials credentials) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString('steamId', credentials.steamId);
+    sharedPreferences.setString('apiKey', credentials.steamApiKey);
   }
 }

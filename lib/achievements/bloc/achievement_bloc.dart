@@ -1,6 +1,7 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_event.dart';
 import 'package:better_steam_achievements/achievements/bloc/achievement_repository.dart';
 import 'package:better_steam_achievements/achievements/bloc/achievement_state.dart';
+import 'package:better_steam_achievements/achievements/bloc/data/credentials.dart';
 
 import 'package:bloc/bloc.dart';
 
@@ -11,6 +12,11 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
     on<InitialiseAchievements>((event, emit) async {
       final credentials = await _repository.getCredentials();
       emit(ActiveAchievementState(credentials));
+    });
+
+    on<SaveCredentialsEvent>((event, emit) async {
+      final credentials = Credentials(event.steamId, event.apiKey);
+      await _repository.saveCredentials(credentials);
     });
   }
 }
