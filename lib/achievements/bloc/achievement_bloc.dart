@@ -13,13 +13,12 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
       final credentials = await _repository.getCredentials();
 
       if (credentials.isEmpty) {
-        emit(ActiveAchievementState(credentials));
+        emit(FailedToLoadCredentailsState());
       }
 
       final games = await _repository.getGames(credentials);
-      print(games);
 
-      emit(ActiveAchievementState(credentials));
+      emit(LoadGamesWithoutAchievementsState(credentials, games));
     });
 
     on<SaveCredentialsEvent>((event, emit) async {

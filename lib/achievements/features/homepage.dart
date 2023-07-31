@@ -14,11 +14,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AchievementBloc, AchievementState>(
+    return BlocConsumer<AchievementBloc, AchievementState>(
+      listener: (BuildContext context, AchievementState state) {},
       builder: (BuildContext context, AchievementState state) {
-        if (state.credentials.isEmpty) {
+        if (state is InitialAchievementState ||
+            state is FailedToLoadCredentailsState) {
           return const HomePageWithConfigLink();
         }
+
+        if (state is LoadGamesWithoutAchievementsState) {
+          return _getLoadingState(state);
+        }
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -29,6 +36,18 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _getLoadingState(LoadGamesWithoutAchievementsState state) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('BSA - Loading'),
+      ),
+      body: Center(
+        child: Text("Loading ${state.games.length}"),
+      ),
     );
   }
 }

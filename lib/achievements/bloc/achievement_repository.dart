@@ -25,7 +25,7 @@ class AchievementRepository {
     sharedPreferences.setString('apiKey', credentials.steamApiKey);
   }
 
-  Future<List<Game>> getGames(Credentials credentials) async {
+  Future<Games> getGames(Credentials credentials) async {
     final gamesResponse = await http.get(
       getBuiltUrl(
         'IPlayerService/GetOwnedGames/v0001',
@@ -35,53 +35,59 @@ class AchievementRepository {
     );
 
     if (gamesResponse.statusCode != 200) {
-      return [];
+      return {};
     }
 
     final reponseBody = convert.jsonDecode(gamesResponse.body);
     final data = reponseBody['response']['games'];
-    final games = <Game>[];
+    final games = <int, Game>{};
     for (final game in data) {
       final applicationId = game['appid'];
-      final achievements = <Achievement>[];
-
-      final achievementsResponse = await http.get(
-        getBuiltUrl(
-          'ISteamUserStats/GetPlayerAchievements/v0001',
-          credentials,
-          {'appid': applicationId.toString(), 'l': 'en'},
-        ),
-      );
-      if (achievementsResponse.statusCode == 200) {
-        final reponseBody = convert.jsonDecode(achievementsResponse.body);
-        final playerstats = reponseBody['playerstats'] as Map;
-        if (playerstats.containsKey('achievements')) {
-          final data = playerstats['achievements'];
-          for (final achievement in data) {
-            achievements.add(
-              Achievement(
-                achievement['apiname'],
-                achievement['name'],
-                achievement['description'],
-                achievement['achieved'] == 1,
-                achievement['unlocktime'],
-              ),
-            );
-          }
-        }
-      }
-
-      games.add(
-        Game(
-          applicationId,
-          game['name'],
-          game['img_icon_url'],
-          game['playtime_forever'],
-          achievements,
-        ),
+      games[applicationId] = Game.emptyAchievements(
+        applicationId,
+        game['name'],
+        game['img_icon_url'],
+        game['playtime_forever'],
       );
     }
     return games;
+  }
+
+  Future<List<Achievement>> getAchievements(
+    Credentials credentials,
+    Game game,
+  ) async {
+    final achievementsResponse = await http.get(
+      getBuiltUrl(
+        'ISteamUserStats/GetPlayerAchievements/v0001',
+        credentials,
+        {'appid': game.appId.toString(), 'l': 'en'},
+      ),
+    );
+
+    if (achievementsResponse.statusCode != 200) {
+      return [];
+    }
+
+    final achievements = <Achievement>[];
+    final reponseBody = convert.jsonDecode(achievementsResponse.body);
+    final playerstats = reponseBody['playerstats'] as Map;
+    if (playerstats.containsKey('achievements')) {
+      final data = playerstats['achievements'];
+      for (final achievement in data) {
+        achievements.add(
+          Achievement(
+            achievement['apiname'],
+            achievement['name'],
+            achievement['description'],
+            achievement['achieved'] == 1,
+            achievement['unlocktime'],
+          ),
+        );
+      }
+    }
+
+    return achievements;
   }
 
   Uri getBuiltUrl(

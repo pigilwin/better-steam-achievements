@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class Achievement {
   final String id;
   final String name;
@@ -5,7 +8,7 @@ class Achievement {
   final bool completed;
   final int unlockTime;
 
-  Achievement(
+  const Achievement(
     this.id,
     this.name,
     this.description,
@@ -13,3 +16,5 @@ class Achievement {
     this.unlockTime,
   );
 }
+
+typedef Achievements = List<Achievement>;

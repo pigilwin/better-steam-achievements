@@ -22,7 +22,9 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
   void initState() {
     super.initState();
     achievementBloc = context.read<AchievementBloc>();
-    final credentials = achievementBloc.state.credentials;
+    final state = achievementBloc.state as WithCredentials;
+    final credentials = state.getCredentails();
+
     steamIdController = TextEditingController.fromValue(
       TextEditingValue(text: credentials.steamId),
     );
