@@ -31,7 +31,44 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
     });
 
     on<FetchAchievementForGameEvent>((event, emit) async {
-      print('here');
+      if (state is LoadGamesWithoutAchievementsState) {
+        final typedState = state as LoadGamesWithoutAchievementsState;
+        final games = typedState.games;
+
+        final credentials = event.credentials;
+        final game = event.game;
+
+        // Fetch the achievements for this game
+        final achievements =
+            await _repository.getAchievements(credentials, game);
+
+        final gamesWithoutCurrentGame = games.where((element) {
+          return game.appId != element.appId;
+        });
+
+        // Create a new map from the current games
+        final newGames = List<Game>.from(gamesWithoutCurrentGame);
+
+        // If the game has no achievements then we don't want to keep the game
+        if (achievements.isEmpty) {
+          emit(LoadGamesWithoutAchievementsState(credentials, newGames));
+          return;
+        }
+
+        // Attach the achievements to the games
+        final gameWithAchievements = game.copyWithAchievements(achievements);
+
+        // Add the game back to the list
+        newGames.add(gameWithAchievements);
+
+        emit(LoadGamesWithoutAchievementsState(credentials, newGames));
+      }
+    });
+    on<ConvertAchievementToActiveStateEvent>((event, emit) {
+      if (state is LoadGamesWithoutAchievementsState) {
+        final typedState = state as LoadGamesWithoutAchievementsState;
+        emit(FullyLoadedGameState(typedState.credentials, typedState.games));
+      }
     });
   }
 }

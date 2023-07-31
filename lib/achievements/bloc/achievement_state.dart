@@ -46,4 +46,30 @@ class LoadGamesWithoutAchievementsState extends AchievementState
   Credentials getCredentails() {
     return credentials;
   }
+
+  List<Game> gamesWithoutAchievementsFetched() {
+    return games.where((element) => !element.achievementsFetched).toList();
+  }
+
+  double getCompletePrecentage() {
+    final notCompletedGames = gamesWithoutAchievementsFetched();
+    final totalGames = games.length;
+    final gamesCompleted = totalGames - notCompletedGames.length;
+    return gamesCompleted / totalGames;
+  }
+}
+
+class FullyLoadedGameState extends AchievementState implements WithCredentials {
+  final Credentials credentials;
+  final Games games;
+
+  FullyLoadedGameState(this.credentials, this.games);
+
+  @override
+  List<Object> get props => [credentials, games];
+
+  @override
+  Credentials getCredentails() {
+    return credentials;
+  }
 }

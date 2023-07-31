@@ -17,3 +17,7 @@ class FetchAchievementForGameEvent extends AchievementEvent {
 
   FetchAchievementForGameEvent(this.credentials, this.game);
 }
+
+class ConvertAchievementToActiveStateEvent extends AchievementEvent {
+  ConvertAchievementToActiveStateEvent();
+}

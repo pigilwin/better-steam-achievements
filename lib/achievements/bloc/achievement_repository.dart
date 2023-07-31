@@ -35,19 +35,21 @@ class AchievementRepository {
     );
 
     if (gamesResponse.statusCode != 200) {
-      return {};
+      return [];
     }
 
     final reponseBody = convert.jsonDecode(gamesResponse.body);
     final data = reponseBody['response']['games'];
-    final games = <int, Game>{};
+    final games = <Game>[];
     for (final game in data) {
       final applicationId = game['appid'];
-      games[applicationId] = Game.emptyAchievements(
-        applicationId,
-        game['name'],
-        game['img_icon_url'],
-        game['playtime_forever'],
+      games.add(
+        Game.emptyAchievements(
+          applicationId,
+          game['name'],
+          game['img_icon_url'],
+          game['playtime_forever'],
+        ),
       );
     }
     return games;

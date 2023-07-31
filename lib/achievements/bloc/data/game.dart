@@ -8,7 +8,7 @@ class Game extends Equatable {
   final String name;
   final String iconHash;
   final int playTime;
-  final bool completed;
+  final bool achievementsFetched;
   final Achievements achievements;
 
   const Game(
@@ -16,7 +16,7 @@ class Game extends Equatable {
     this.name,
     this.iconHash,
     this.playTime,
-    this.completed,
+    this.achievementsFetched,
     this.achievements,
   );
 
@@ -51,9 +51,9 @@ class Game extends Equatable {
         name,
         iconHash,
         playTime,
-        completed,
+        achievementsFetched,
         achievements,
       ];
 }
 
-typedef Games = Map<int, Game>;
+typedef Games = List<Game>;
