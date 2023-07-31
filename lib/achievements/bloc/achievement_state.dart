@@ -1,7 +1,4 @@
-import 'package:better_steam_achievements/achievements/bloc/data/credentials.dart';
-import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+part of 'achievement_bloc.dart';
 
 abstract class WithCredentials {
   Credentials getCredentails();
@@ -20,10 +17,7 @@ class InitialAchievementState extends AchievementState
   }
 
   @override
-  List<Object> get props => [
-        credentials.steamApiKey,
-        credentials.steamId,
-      ];
+  List<Object> get props => [credentials];
 
   @override
   Credentials getCredentails() {
@@ -46,11 +40,7 @@ class LoadGamesWithoutAchievementsState extends AchievementState
   LoadGamesWithoutAchievementsState(this.credentials, this.games);
 
   @override
-  List<Object> get props => [
-        credentials.steamApiKey,
-        credentials.steamId,
-        games,
-      ];
+  List<Object> get props => [credentials, games];
 
   @override
   Credentials getCredentails() {

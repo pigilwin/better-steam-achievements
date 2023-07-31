@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-class Achievement {
+class Achievement extends Equatable {
   final String id;
   final String name;
   final String description;
@@ -15,6 +16,15 @@ class Achievement {
     this.completed,
     this.unlockTime,
   );
+
+  @override
+  List<Object> get props => [
+        id,
+        name,
+        description,
+        completed,
+        unlockTime,
+      ];
 }
 
 typedef Achievements = List<Achievement>;

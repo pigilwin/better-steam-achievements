@@ -1,5 +1,4 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
-import 'package:better_steam_achievements/achievements/bloc/achievement_event.dart';
 import 'package:better_steam_achievements/achievements/bloc/achievement_repository.dart';
 import 'package:better_steam_achievements/router.dart';
 import 'package:flutter/material.dart';

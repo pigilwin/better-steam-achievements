@@ -1,8 +1,9 @@
 import 'package:better_steam_achievements/achievements/bloc/data/achievement.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-class Game {
+class Game extends Equatable {
   final int appId;
   final String name;
   final String iconHash;
@@ -43,6 +44,16 @@ class Game {
   String toString() {
     return "$name with ${achievements.length} achievements";
   }
+
+  @override
+  List<Object> get props => [
+        appId,
+        name,
+        iconHash,
+        playTime,
+        completed,
+        achievements,
+      ];
 }
 
 typedef Games = Map<int, Game>;
