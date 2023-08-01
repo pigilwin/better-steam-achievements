@@ -78,4 +78,10 @@ class FullyLoadedGameState extends AchievementState implements WithCredentials {
       return game.achievementsCompleted();
     }).toList();
   }
+
+  Games gamesWithLessThanTenAchivementsToGo() {
+    return games.where((element) {
+      return element.hasLessThanTenAchievements();
+    }).toList();
+  }
 }

@@ -46,6 +46,12 @@ class Game extends Equatable {
     return completedAchievementsLength == achievements.length;
   }
 
+  bool hasLessThanTenAchievements() {
+    final notCompletedAchievments =
+        achievements.where((element) => !element.completed).length;
+    return notCompletedAchievments < 10 && notCompletedAchievments > 0;
+  }
+
   String imageUrl() {
     return "https://cdn.akamai.steamstatic.com/steam/apps/$appId/header.jpg";
   }

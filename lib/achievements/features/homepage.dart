@@ -1,5 +1,6 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
 import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
+import 'package:better_steam_achievements/achievements/components/menu.dart';
 import 'package:better_steam_achievements/achievements/features/homepage_with_config_link.dart';
 import 'package:better_steam_achievements/achievements/features/homepage_with_loading.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
+
     return BlocBuilder<AchievementBloc, AchievementState>(
       builder: (BuildContext context, AchievementState state) {
         if (state is InitialAchievementState ||
@@ -37,10 +40,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
 
         return Scaffold(
+          key: scaffoldState,
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: const Text('Better Steam Achievements'),
+            leading: IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                scaffoldState.currentState!.openDrawer();
+              },
+            ),
           ),
+          drawer: const Menu(),
           body: const Center(
             child: FrontPageSlider(),
           ),
