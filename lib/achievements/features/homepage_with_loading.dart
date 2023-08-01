@@ -87,7 +87,7 @@ class _HomePageWithLoadingState extends State<HomePageWithLoading> {
           ),
         );
       } else {
-        achievementBloc.add(ConvertAchievementToActiveStateEvent());
+        achievementBloc.add(CompleteFetchingAchievementEvent());
         context.go('/');
       }
     }

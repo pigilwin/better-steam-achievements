@@ -64,7 +64,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         emit(LoadGamesWithoutAchievementsState(credentials, newGames));
       }
     });
-    on<ConvertAchievementToActiveStateEvent>((event, emit) {
+    on<CompleteFetchingAchievementEvent>((event, emit) {
       if (state is LoadGamesWithoutAchievementsState) {
         final typedState = state as LoadGamesWithoutAchievementsState;
         emit(FullyLoadedGameState(typedState.credentials, typedState.games));

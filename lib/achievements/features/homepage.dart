@@ -1,4 +1,5 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
+import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
 import 'package:better_steam_achievements/achievements/features/homepage_with_config_link.dart';
 import 'package:better_steam_achievements/achievements/features/homepage_with_loading.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             title: const Text('Better Steam Achievements'),
           ),
           body: const Center(
-            child: Text("Homepage will be here"),
+            child: FrontPageSlider(),
           ),
         );
       },

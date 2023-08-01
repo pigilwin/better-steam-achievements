@@ -40,6 +40,16 @@ class Game extends Equatable {
     );
   }
 
+  bool achievementsCompleted() {
+    final completedAchievementsLength =
+        achievements.where((element) => element.completed).length;
+    return completedAchievementsLength == achievements.length;
+  }
+
+  String imageUrl() {
+    return "https://cdn.akamai.steamstatic.com/steam/apps/$appId/header.jpg";
+  }
+
   @override
   String toString() {
     return "$name with ${achievements.length} achievements";

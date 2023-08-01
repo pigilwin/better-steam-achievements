@@ -72,4 +72,10 @@ class FullyLoadedGameState extends AchievementState implements WithCredentials {
   Credentials getCredentails() {
     return credentials;
   }
+
+  Games fullyCompletedGames() {
+    return games.where((game) {
+      return game.achievementsCompleted();
+    }).toList();
+  }
 }

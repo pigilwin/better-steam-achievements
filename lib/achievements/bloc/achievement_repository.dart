@@ -38,17 +38,18 @@ class AchievementRepository {
       return [];
     }
 
-    final reponseBody = convert.jsonDecode(gamesResponse.body);
+    final reponseBody =
+        (convert.jsonDecode(gamesResponse.body) as Map<String, dynamic>);
     final data = reponseBody['response']['games'];
     final games = <Game>[];
     for (final game in data) {
-      final applicationId = game['appid'];
+      final applicationId = getItem<int>(game, 'appid', 0);
       games.add(
         Game.emptyAchievements(
           applicationId,
-          game['name'],
-          game['img_icon_url'],
-          game['playtime_forever'],
+          getItem<String>(game, 'name', ''),
+          getItem<String>(game, 'img_icon_url', ''),
+          getItem<int>(game, 'playtime_forever', 0),
         ),
       );
     }
@@ -79,11 +80,11 @@ class AchievementRepository {
       for (final achievement in data) {
         achievements.add(
           Achievement(
-            achievement['apiname'],
-            achievement['name'],
-            achievement['description'],
-            achievement['achieved'] == 1,
-            achievement['unlocktime'],
+            getItem<String>(achievement, 'apiname', ''),
+            getItem<String>(achievement, 'name', ''),
+            getItem<String>(achievement, 'description', ''),
+            getItem<int>(achievement, 'achieved', 0) == 1,
+            getItem<int>(achievement, 'unlocktime', 0),
           ),
         );
       }
@@ -104,5 +105,13 @@ class AchievementRepository {
     };
     queryParameters.addAll(additional);
     return Uri.https("api.steampowered.com", path, queryParameters);
+  }
+
+  T getItem<T>(dynamic row, String key, T defaultValue) {
+    final data = row as Map<String, dynamic>;
+    if (data.containsKey(key)) {
+      return data[key] as T;
+    }
+    return defaultValue;
   }
 }
