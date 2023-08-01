@@ -53,6 +53,16 @@ class _MenuState extends State<Menu> {
       );
     }
 
+    children.add(
+      ListTile(
+        title: const Text("Preferences"),
+        trailing: const Icon(Icons.settings),
+        onTap: () {
+          context.go('/preferences');
+        },
+      ),
+    );
+
     return Drawer(
       backgroundColor: theme.drawerTheme.backgroundColor,
       child: Column(

@@ -52,9 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           drawer: const Menu(),
-          body: const Center(
-            child: FrontPageSlider(),
-          ),
+          body: const FrontPageSlider(),
         );
       },
     );
