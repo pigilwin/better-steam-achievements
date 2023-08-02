@@ -1,5 +1,4 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
-import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
 import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
 import 'package:better_steam_achievements/achievements/components/fully_completed_game_card.dart';
 import 'package:better_steam_achievements/achievements/components/menu.dart';
