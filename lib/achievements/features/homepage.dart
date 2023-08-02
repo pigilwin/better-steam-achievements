@@ -1,4 +1,5 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
+import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
 import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
 import 'package:better_steam_achievements/achievements/components/menu.dart';
 import 'package:better_steam_achievements/achievements/features/homepage_with_config_link.dart';
@@ -16,12 +17,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final AnimationController progressBarController;
   late final AchievementBloc achievementBloc;
+  late final FullyLoadedGameState achievementState;
+  late final Games fullyCompletedGames;
 
   @override
   void initState() {
     super.initState();
     progressBarController = AnimationController(vsync: this);
     achievementBloc = context.read<AchievementBloc>();
+    achievementState = achievementBloc.state as FullyLoadedGameState;
+    fullyCompletedGames = achievementState.fullyCompletedGames();
   }
 
   @override
@@ -43,7 +48,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           key: scaffoldState,
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: const Text('Better Steam Achievements'),
+            title: Text(
+              "Better Steam Achievements - Fully completed ${fullyCompletedGames.length}",
+            ),
             leading: IconButton(
               icon: const Icon(Icons.menu),
               onPressed: () {
@@ -52,7 +59,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           drawer: const Menu(),
-          body: const FrontPageSlider(),
+          body: FrontPageSlider(
+            fullyCompletedGames: fullyCompletedGames,
+          ),
         );
       },
     );

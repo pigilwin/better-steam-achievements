@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
+import 'package:better_steam_achievements/achievements/components/fully_completed_game_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FrontPageSlider extends StatefulWidget {
-  const FrontPageSlider({super.key});
+  const FrontPageSlider({super.key, required this.fullyCompletedGames});
+
+  final Games fullyCompletedGames;
 
   @override
   State<FrontPageSlider> createState() => _FrontPageSliderState();
@@ -14,17 +17,11 @@ class FrontPageSlider extends StatefulWidget {
 
 class _FrontPageSliderState extends State<FrontPageSlider>
     with TickerProviderStateMixin {
-  late final AchievementBloc achievementBloc;
-  late final FullyLoadedGameState achievementState;
   late final PageController pageController;
-  late final Games fullyCompletedGames;
 
   @override
   void initState() {
     super.initState();
-    achievementBloc = context.read<AchievementBloc>();
-    achievementState = achievementBloc.state as FullyLoadedGameState;
-    fullyCompletedGames = achievementState.fullyCompletedGames();
     pageController = PageController(initialPage: 0, viewportFraction: 1);
 
     const fiveSeconds = Duration(seconds: 5);
@@ -33,7 +30,7 @@ class _FrontPageSliderState extends State<FrontPageSlider>
       Timer.periodic(fiveSeconds, (timer) async {
         if (pageController.hasClients) {
           var nextPage = pageController.page!.toInt() + 1;
-          if (nextPage > fullyCompletedGames.length - 1) {
+          if (nextPage > widget.fullyCompletedGames.length - 1) {
             nextPage = 0;
           }
 
@@ -49,46 +46,13 @@ class _FrontPageSliderState extends State<FrontPageSlider>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).textTheme;
-    final media = MediaQuery.of(context);
-
-    final largeWhiteText = theme.displayLarge!.copyWith(color: Colors.white);
-    final mediumWhiteText = theme.displayMedium!.copyWith(color: Colors.white);
-
     return PageView.builder(
       pageSnapping: true,
       controller: pageController,
-      itemCount: fullyCompletedGames.length,
+      itemCount: widget.fullyCompletedGames.length,
       itemBuilder: (context, index) {
-        final game = fullyCompletedGames[index];
-        final achievementCount = game.achievements.length;
-        return Stack(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              child: Image.network(
-                game.imageUrl(),
-                fit: BoxFit.cover,
-                height: media.size.height,
-                width: media.size.width,
-              ),
-            ),
-            Container(
-              alignment: Alignment.topCenter,
-              child: Text(
-                "Fully completed ${fullyCompletedGames.length} games",
-                style: largeWhiteText,
-              ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "${game.name} with $achievementCount achievements",
-                style: mediumWhiteText,
-              ),
-            ),
-          ],
-        );
+        final game = widget.fullyCompletedGames[index];
+        return FullyCompletedGameCard(game: game);
       },
     );
   }

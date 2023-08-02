@@ -53,7 +53,7 @@ class Game extends Equatable {
   }
 
   String imageUrl() {
-    return "https://cdn.akamai.steamstatic.com/steam/apps/$appId/header.jpg";
+    return "https://cdn.akamai.steamstatic.com/steam/apps/$appId/library_hero.jpg";
   }
 
   @override
