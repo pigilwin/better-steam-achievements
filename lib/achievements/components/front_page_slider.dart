@@ -1,15 +1,17 @@
 import 'dart:async';
 
-import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
-import 'package:better_steam_achievements/achievements/components/fully_completed_game_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FrontPageSlider extends StatefulWidget {
-  const FrontPageSlider({super.key, required this.fullyCompletedGames});
+  const FrontPageSlider({
+    super.key,
+    required this.games,
+    required this.cardGenerator,
+  });
 
-  final Games fullyCompletedGames;
+  final Games games;
+  final Widget Function(Game game) cardGenerator;
 
   @override
   State<FrontPageSlider> createState() => _FrontPageSliderState();
@@ -30,7 +32,7 @@ class _FrontPageSliderState extends State<FrontPageSlider>
       Timer.periodic(fiveSeconds, (timer) async {
         if (pageController.hasClients) {
           var nextPage = pageController.page!.toInt() + 1;
-          if (nextPage > widget.fullyCompletedGames.length - 1) {
+          if (nextPage > widget.games.length - 1) {
             nextPage = 0;
           }
 
@@ -49,10 +51,10 @@ class _FrontPageSliderState extends State<FrontPageSlider>
     return PageView.builder(
       pageSnapping: true,
       controller: pageController,
-      itemCount: widget.fullyCompletedGames.length,
+      itemCount: widget.games.length,
       itemBuilder: (context, index) {
-        final game = widget.fullyCompletedGames[index];
-        return FullyCompletedGameCard(game: game);
+        final game = widget.games[index];
+        return widget.cardGenerator(game);
       },
     );
   }
