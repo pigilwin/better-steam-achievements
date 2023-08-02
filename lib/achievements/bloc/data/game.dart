@@ -47,9 +47,12 @@ class Game extends Equatable {
   }
 
   bool hasLessThanTenAchievements() {
-    final notCompletedAchievments =
-        achievements.where((element) => !element.completed).length;
+    final notCompletedAchievments = incompleteAchievements().length;
     return notCompletedAchievments < 10 && notCompletedAchievments > 0;
+  }
+
+  Achievements incompleteAchievements() {
+    return achievements.where((element) => !element.completed).toList();
   }
 
   String imageUrl() {
