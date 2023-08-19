@@ -59,6 +59,10 @@ class Game extends Equatable {
     return "https://cdn.akamai.steamstatic.com/steam/apps/$appId/library_hero.jpg";
   }
 
+  String logoUrl() {
+    return "https://cdn.cloudflare.steamstatic.com/steam/apps/$appId/logo.png";
+  }
+
   @override
   String toString() {
     return "$name with ${achievements.length} achievements";
