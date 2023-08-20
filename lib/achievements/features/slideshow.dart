@@ -1,21 +1,19 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
-import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
+import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
 import 'package:better_steam_achievements/achievements/components/fully_completed_game_card.dart';
 import 'package:better_steam_achievements/achievements/components/menu.dart';
-import 'package:better_steam_achievements/achievements/features/homepage_with_config_link.dart';
-import 'package:better_steam_achievements/achievements/features/homepage_with_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SlideShow extends StatefulWidget {
+  const SlideShow({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SlideShow> createState() => _SlideShowState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SlideShowState extends State<SlideShow> {
   late final AchievementBloc achievementBloc;
 
   @override
@@ -30,15 +28,6 @@ class _HomePageState extends State<HomePage> {
 
     return BlocBuilder<AchievementBloc, AchievementState>(
       builder: (BuildContext context, AchievementState state) {
-        if (state is InitialAchievementState ||
-            state is FailedToLoadCredentailsState) {
-          return const HomePageWithConfigLink();
-        }
-
-        if (state is LoadGamesWithoutAchievementsState) {
-          return const HomePageWithLoading();
-        }
-
         final achievementState = achievementBloc.state as FullyLoadedGameState;
         final fullyCompletedGames = achievementState.fullyCompletedGames();
         fullyCompletedGames.shuffle();
@@ -58,29 +47,21 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           drawer: const Menu(),
-          body: _getChildren(fullyCompletedGames),
+          body: FrontPageSlider(
+            games: fullyCompletedGames,
+            cardGenerator: (game) => FullyCompletedGameCard(
+              game: game,
+              largeText: true,
+            ),
+          ),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.minimize),
             onPressed: () {
-              context.go('/slide-show');
+              context.go('/');
             },
           ),
         );
       },
-    );
-  }
-
-  Widget _getChildren(Games fullyCompletedGames) {
-    final widgets = <Widget>[];
-    for (final game in fullyCompletedGames) {
-      widgets.add(FullyCompletedGameCard(
-        game: game,
-        largeText: false,
-      ));
-    }
-    return GridView.count(
-      crossAxisCount: 4,
-      children: widgets,
     );
   }
 }

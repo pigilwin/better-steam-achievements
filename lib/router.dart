@@ -2,6 +2,7 @@ import 'package:better_steam_achievements/achievements/features/configuration.da
 import 'package:better_steam_achievements/achievements/features/homepage.dart';
 import 'package:better_steam_achievements/achievements/features/less_than_ten.dart';
 import 'package:better_steam_achievements/achievements/features/preferences.dart';
+import 'package:better_steam_achievements/achievements/features/slideshow.dart';
 import 'package:go_router/go_router.dart';
 
 class ApplicationRouter {
@@ -11,6 +12,10 @@ class ApplicationRouter {
         GoRoute(
           path: '/',
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/slide-show',
+          builder: (context, state) => const SlideShow(),
         ),
         GoRoute(
           path: '/config',
