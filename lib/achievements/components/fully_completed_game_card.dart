@@ -13,6 +13,10 @@ class FullyCompletedGameCard extends StatelessWidget {
     final largeWhiteText = theme.displayLarge!.copyWith(color: Colors.white);
 
     final achievementCount = game.achievements.length;
+    var achievementText = "This game has $achievementCount achievement";
+    if (achievementCount > 1) {
+      achievementText = "This game has $achievementCount achievements";
+    }
 
     return Stack(
       children: [
@@ -27,11 +31,16 @@ class FullyCompletedGameCard extends StatelessWidget {
         ),
         Container(
           alignment: Alignment.center,
+          child: Image.network(game.logoUrl()),
+        ),
+        Container(
+          alignment: Alignment.bottomCenter,
+          margin: const EdgeInsets.only(bottom: 10),
           child: Text(
-            "${game.name} with $achievementCount achievements",
+            achievementText,
             style: largeWhiteText,
           ),
-        ),
+        )
       ],
     );
   }

@@ -13,6 +13,11 @@ class LessThanTenGameCard extends StatelessWidget {
     final largeWhiteText = theme.displayLarge!.copyWith(color: Colors.white);
     final achievementCount = game.incompleteAchievements().length;
 
+    var achievementText = "$achievementCount achievement remaining";
+    if (achievementCount > 1) {
+      achievementText = "$achievementCount achievements remaining";
+    }
+
     return Stack(
       children: [
         Container(
@@ -26,8 +31,12 @@ class LessThanTenGameCard extends StatelessWidget {
         ),
         Container(
           alignment: Alignment.center,
+          child: Image.network(game.logoUrl()),
+        ),
+        Container(
+          alignment: Alignment.bottomCenter,
           child: Text(
-            "${game.name} with $achievementCount achievements remaining",
+            achievementText,
             style: largeWhiteText,
           ),
         ),
