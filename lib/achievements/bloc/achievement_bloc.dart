@@ -51,6 +51,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
         // If the game has no achievements then we don't want to keep the game
         if (achievements.isEmpty) {
+          await _repository.cacheGamesWithoutAchievement(game.appId);
           emit(LoadGamesWithoutAchievementsState(credentials, newGames));
           return;
         }
