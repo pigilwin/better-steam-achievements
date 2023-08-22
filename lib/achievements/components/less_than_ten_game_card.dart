@@ -2,16 +2,25 @@ import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
 import 'package:flutter/material.dart';
 
 class LessThanTenGameCard extends StatelessWidget {
-  const LessThanTenGameCard({super.key, required this.game});
+  const LessThanTenGameCard({
+    super.key,
+    required this.game,
+    required this.largeText,
+  });
 
   final Game game;
+  final bool largeText;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
     final media = MediaQuery.of(context);
-    final largeWhiteText = theme.displayLarge!.copyWith(color: Colors.white);
     final achievementCount = game.incompleteAchievements().length;
+
+    var textSize = theme.displaySmall!.copyWith(color: Colors.white);
+    if (largeText) {
+      textSize = theme.displayLarge!.copyWith(color: Colors.white);
+    }
 
     var achievementText = "$achievementCount achievement remaining";
     if (achievementCount > 1) {
@@ -37,7 +46,7 @@ class LessThanTenGameCard extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Text(
             achievementText,
-            style: largeWhiteText,
+            style: textSize,
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dart';
-import 'package:better_steam_achievements/achievements/components/front_page_slider.dart';
+import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
 import 'package:better_steam_achievements/achievements/components/less_than_ten_game_card.dart';
 import 'package:better_steam_achievements/achievements/components/menu.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +42,21 @@ class _LessThanTenPageState extends State<LessThanTenPage> {
         ),
       ),
       drawer: const Menu(),
-      body: FrontPageSlider(
-        games: games,
-        cardGenerator: (game) => LessThanTenGameCard(game: game),
-      ),
+      body: _getChildren(games),
+    );
+  }
+
+  Widget _getChildren(Games nearlyCompleteGames) {
+    final widgets = <Widget>[];
+    for (final game in nearlyCompleteGames) {
+      widgets.add(LessThanTenGameCard(
+        game: game,
+        largeText: false,
+      ));
+    }
+    return GridView.count(
+      crossAxisCount: 4,
+      children: widgets,
     );
   }
 }
