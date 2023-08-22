@@ -2,7 +2,6 @@ import 'package:better_steam_achievements/achievements/bloc/achievement_bloc.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class HomePageWithLoading extends StatefulWidget {
   const HomePageWithLoading({super.key});
@@ -58,12 +57,9 @@ class _HomePageWithLoadingState extends State<HomePageWithLoading> {
                   Text(
                       "Found ${state.games.length} games, these will be checked for achievements."),
                   const Text("Achievements now fetching..."),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: LinearPercentIndicator(
-                      animation: true,
-                      percent: state.getCompletePrecentage(),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
                   ),
                 ],
               ),

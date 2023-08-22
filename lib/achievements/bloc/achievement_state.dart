@@ -50,13 +50,6 @@ class LoadGamesWithoutAchievementsState extends AchievementState
   List<Game> gamesWithoutAchievementsFetched() {
     return games.where((element) => !element.achievementsFetched).toList();
   }
-
-  double getCompletePrecentage() {
-    final notCompletedGames = gamesWithoutAchievementsFetched();
-    final totalGames = games.length;
-    final gamesCompleted = totalGames - notCompletedGames.length;
-    return gamesCompleted / totalGames;
-  }
 }
 
 class FullyLoadedGameState extends AchievementState implements WithCredentials {
