@@ -89,7 +89,8 @@ class _InformationPageState extends State<InformationPage> {
       ),
     ];
 
-    if (game.gameState != GameState.noachievements) {
+    if (game.gameState != GameState.noachievements &&
+        !game.achievementsCompleted()) {
       children.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
