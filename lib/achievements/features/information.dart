@@ -34,7 +34,15 @@ class _InformationPageState extends State<InformationPage> {
 
     final children = <Widget>[_generateInformationCard()];
 
-    for (final Achievement achievement in game.achievements) {
+    final achievements = game.achievements;
+    achievements.sort((Achievement a, Achievement b) {
+      if (!a.completed || !b.completed) {
+        return 1;
+      }
+      return 0;
+    });
+
+    for (final Achievement achievement in achievements) {
       children.add(_addAchievement(achievement));
     }
 
