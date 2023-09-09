@@ -1,55 +1,10 @@
 import 'package:better_steam_achievements/achievements/bloc/data/achievement.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/credentials.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class AchievementRepository {
-  Future<Credentials> getCredentials() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final containsSteamId = sharedPreferences.containsKey('steamId');
-    final containsApiKey = sharedPreferences.containsKey('apiKey');
-
-    if (!containsApiKey || !containsSteamId) {
-      return Credentials.empty();
-    }
-    final id = sharedPreferences.getString('steamId')!;
-    final apiKey = sharedPreferences.getString('apiKey')!;
-    return Credentials(id, apiKey);
-  }
-
-  Future<void> saveCredentials(Credentials credentials) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('steamId', credentials.steamId);
-    sharedPreferences.setString('apiKey', credentials.steamApiKey);
-  }
-
-  Future<List<int>> cachedGamesWithoutAchievements() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    if (!sharedPreferences.containsKey('cachedGamesWithoutAchievements')) {
-      return [];
-    }
-    final games =
-        sharedPreferences.getStringList('cachedGamesWithoutAchievements')!;
-    return games.map((e) => int.parse(e)).toList();
-  }
-
-  Future<void> cacheGamesWithoutAchievement(int gameId) async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    if (!sharedPreferences.containsKey('cachedGamesWithoutAchievements')) {
-      final games = [gameId.toString()];
-      sharedPreferences.setStringList('cachedGamesWithoutAchievements', games);
-    }
-    final games =
-        sharedPreferences.getStringList('cachedGamesWithoutAchievements')!;
-    games.add(gameId.toString());
-    await sharedPreferences.setStringList(
-      'cachedGamesWithoutAchievements',
-      games,
-    );
-  }
-
   Future<Games> getGames(Credentials credentials) async {
     final gamesResponse = await http.get(
       getBuiltUrl(
@@ -63,24 +18,16 @@ class AchievementRepository {
       return [];
     }
 
-    final gamesWithoutAchievements = await cachedGamesWithoutAchievements();
-
     final reponseBody =
         (convert.jsonDecode(gamesResponse.body) as Map<String, dynamic>);
     final data = reponseBody['response']['games'];
     final games = <Game>[];
     for (final game in data) {
       final applicationId = getItem<int>(game, 'appid', 0);
-
-      if (gamesWithoutAchievements.contains(applicationId)) {
-        continue;
-      }
-
       games.add(
-        Game.emptyAchievements(
+        Game.untouched(
           applicationId,
           getItem<String>(game, 'name', ''),
-          getItem<int>(game, 'playtime_forever', 0),
         ),
       );
     }

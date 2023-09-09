@@ -12,10 +12,9 @@ class SaveCredentialsEvent extends AchievementEvent {
 }
 
 class FetchAchievementForGameEvent extends AchievementEvent {
-  final Credentials credentials;
   final Game game;
 
-  FetchAchievementForGameEvent(this.credentials, this.game);
+  FetchAchievementForGameEvent(this.game);
 }
 
 class CompleteFetchingAchievementEvent extends AchievementEvent {

@@ -1,28 +1,14 @@
 part of 'achievement_bloc.dart';
 
-abstract class WithCredentials {
-  Credentials getCredentails();
-}
-
 @immutable
 abstract class AchievementState extends Equatable {}
 
 @immutable
-class InitialAchievementState extends AchievementState
-    implements WithCredentials {
-  late final Credentials credentials;
-
-  InitialAchievementState() {
-    credentials = Credentials.empty();
-  }
+class InitialAchievementState extends AchievementState {
+  InitialAchievementState();
 
   @override
-  List<Object> get props => [credentials];
-
-  @override
-  Credentials getCredentails() {
-    return credentials;
-  }
+  List<Object> get props => [];
 }
 
 @immutable
@@ -32,39 +18,28 @@ class FailedToLoadCredentailsState extends AchievementState {
 }
 
 @immutable
-class LoadGamesWithoutAchievementsState extends AchievementState
-    implements WithCredentials {
-  final Credentials credentials;
+class LoadGamesWithoutAchievementsState extends AchievementState {
   final Games games;
 
-  LoadGamesWithoutAchievementsState(this.credentials, this.games);
+  LoadGamesWithoutAchievementsState(this.games);
 
   @override
-  List<Object> get props => [credentials, games];
-
-  @override
-  Credentials getCredentails() {
-    return credentials;
-  }
+  List<Object> get props => [games];
 
   List<Game> gamesWithoutAchievementsFetched() {
-    return games.where((element) => !element.achievementsFetched).toList();
+    return games
+        .where((element) => element.gameState == GameState.untouched)
+        .toList();
   }
 }
 
-class FullyLoadedGameState extends AchievementState implements WithCredentials {
-  final Credentials credentials;
+class FullyLoadedGameState extends AchievementState {
   final Games games;
 
-  FullyLoadedGameState(this.credentials, this.games);
+  FullyLoadedGameState(this.games);
 
   @override
-  List<Object> get props => [credentials, games];
-
-  @override
-  Credentials getCredentails() {
-    return credentials;
-  }
+  List<Object> get props => [games];
 
   Games fullyCompletedGames() {
     return games.where((game) {

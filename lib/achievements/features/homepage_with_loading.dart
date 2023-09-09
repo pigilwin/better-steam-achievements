@@ -23,7 +23,6 @@ class _HomePageWithLoadingState extends State<HomePageWithLoading> {
       if (notCompletedGames.isNotEmpty) {
         achievementBloc.add(
           FetchAchievementForGameEvent(
-            state.credentials,
             notCompletedGames.first,
           ),
         );
@@ -78,7 +77,6 @@ class _HomePageWithLoadingState extends State<HomePageWithLoading> {
       if (gamesWithoutAchievementsFetched.isNotEmpty) {
         achievementBloc.add(
           FetchAchievementForGameEvent(
-            state.credentials,
             gamesWithoutAchievementsFetched.first,
           ),
         );

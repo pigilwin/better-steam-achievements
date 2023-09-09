@@ -1,6 +1,8 @@
-import 'package:better_steam_achievements/achievements/bloc/achievement_repository.dart';
+import 'package:better_steam_achievements/achievements/bloc/repositories/achievement_repository.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/credentials.dart';
 import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
+import 'package:better_steam_achievements/achievements/bloc/repositories/credentials_repository.dart';
+import 'package:better_steam_achievements/achievements/bloc/repositories/games_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -10,24 +12,42 @@ part 'achievement_event.dart';
 part 'achievement_state.dart';
 
 class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
-  final AchievementRepository _repository;
+  final CredentialsRepository _credentialsRepository;
+  final GamesRepository _gamesRepository;
+  final AchievementRepository _achievementRepository;
 
-  AchievementBloc(this._repository) : super(InitialAchievementState()) {
+  AchievementBloc(
+    this._credentialsRepository,
+    this._gamesRepository,
+    this._achievementRepository,
+  ) : super(InitialAchievementState()) {
     on<InitialiseAchievements>((event, emit) async {
-      final credentials = await _repository.getCredentials();
+      final credentials = _credentialsRepository.credentials;
 
       if (credentials.isEmpty) {
         emit(FailedToLoadCredentailsState());
       }
 
-      final games = await _repository.getGames(credentials);
+      final loadedGames = await _achievementRepository.getGames(credentials);
+      final games = List<Game>.empty();
+      for (final game in loadedGames) {
+        if (_gamesRepository.isGameHidden(game)) {
+          games.add(game.copyWithHidden());
+        } else {
+          games.add(game);
+        }
+      }
 
-      emit(LoadGamesWithoutAchievementsState(credentials, games));
+      emit(
+        LoadGamesWithoutAchievementsState(
+          games,
+        ),
+      );
     });
 
-    on<SaveCredentialsEvent>((event, emit) async {
+    on<SaveCredentialsEvent>((event, emit) {
       final credentials = Credentials(event.steamId, event.apiKey);
-      await _repository.saveCredentials(credentials);
+      _credentialsRepository.saveCredentials(credentials);
     });
 
     on<FetchAchievementForGameEvent>((event, emit) async {
@@ -35,12 +55,13 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         final typedState = state as LoadGamesWithoutAchievementsState;
         final games = typedState.games;
 
-        final credentials = event.credentials;
         final game = event.game;
 
         // Fetch the achievements for this game
-        final achievements =
-            await _repository.getAchievements(credentials, game);
+        final achievements = await _achievementRepository.getAchievements(
+          _credentialsRepository.credentials,
+          game,
+        );
 
         // Remove the current game from the list, if it has no achievements
         // then we don't want to store it
@@ -51,10 +72,17 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         // Create a new map from the current games
         final newGames = List<Game>.from(gamesWithoutCurrentGame);
 
+        if (_gamesRepository.isGameHidden(game)) {
+          newGames.add(game.copyWithHidden());
+          emit(LoadGamesWithoutAchievementsState(newGames));
+          return;
+        }
+
         // If the game has no achievements then we don't want to keep the game
         if (achievements.isEmpty) {
-          await _repository.cacheGamesWithoutAchievement(game.appId);
-          emit(LoadGamesWithoutAchievementsState(credentials, newGames));
+          newGames.add(game.copyWithNoAchievements());
+          await _gamesRepository.cacheGameNoAchievements(game);
+          emit(LoadGamesWithoutAchievementsState(newGames));
           return;
         }
 
@@ -64,14 +92,19 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         // Add the game back to the list
         newGames.add(gameWithAchievements);
 
-        emit(LoadGamesWithoutAchievementsState(credentials, newGames));
+        emit(LoadGamesWithoutAchievementsState(newGames));
       }
     });
+
     on<CompleteFetchingAchievementEvent>((event, emit) {
       if (state is LoadGamesWithoutAchievementsState) {
         final typedState = state as LoadGamesWithoutAchievementsState;
-        emit(FullyLoadedGameState(typedState.credentials, typedState.games));
+        emit(FullyLoadedGameState(typedState.games));
       }
     });
+  }
+
+  Credentials getCredentials() {
+    return _credentialsRepository.credentials;
   }
 }

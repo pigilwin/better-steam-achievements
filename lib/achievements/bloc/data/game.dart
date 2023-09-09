@@ -6,32 +6,46 @@ import 'package:flutter/material.dart';
 class Game extends Equatable {
   final int appId;
   final String name;
-  final int playTime;
-  final bool achievementsFetched;
+  final GameState gameState;
   final Achievements achievements;
 
   const Game(
     this.appId,
     this.name,
-    this.playTime,
-    this.achievementsFetched,
+    this.gameState,
     this.achievements,
   );
 
-  factory Game.emptyAchievements(
+  factory Game.untouched(
     int appId,
     String name,
-    int playTime,
   ) {
-    return Game(appId, name, playTime, false, const []);
+    return Game(appId, name, GameState.untouched, const []);
+  }
+
+  Game copyWithNoAchievements() {
+    return Game(
+      appId,
+      name,
+      GameState.noachievements,
+      const [],
+    );
+  }
+
+  Game copyWithHidden() {
+    return Game(
+      appId,
+      name,
+      GameState.hidden,
+      const [],
+    );
   }
 
   Game copyWithAchievements(Achievements achievements) {
     return Game(
       appId,
       name,
-      playTime,
-      true,
+      GameState.loaded,
       achievements,
     );
   }
@@ -73,10 +87,16 @@ class Game extends Equatable {
   List<Object> get props => [
         appId,
         name,
-        playTime,
-        achievementsFetched,
+        gameState,
         achievements,
       ];
 }
 
 typedef Games = List<Game>;
+
+enum GameState {
+  untouched,
+  noachievements,
+  hidden,
+  loaded,
+}
