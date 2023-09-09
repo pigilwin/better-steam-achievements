@@ -35,6 +35,8 @@ class _InformationPageState extends State<InformationPage> {
     final children = <Widget>[_generateInformationCard()];
 
     final achievements = game.achievements;
+
+    // Sort incomplete achievements first
     achievements.sort((Achievement a, Achievement b) {
       if (!a.completed || !b.completed) {
         return 1;
