@@ -5,14 +5,14 @@ import 'package:better_steam_achievements/achievements/components/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LessThanTenPage extends StatefulWidget {
-  const LessThanTenPage({super.key});
+class MoreThanTenPage extends StatefulWidget {
+  const MoreThanTenPage({super.key});
 
   @override
-  State<LessThanTenPage> createState() => _LessThanTenPageState();
+  State<MoreThanTenPage> createState() => _MoreThanTenPageState();
 }
 
-class _LessThanTenPageState extends State<LessThanTenPage> {
+class _MoreThanTenPageState extends State<MoreThanTenPage> {
   final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   late final AchievementBloc achievementBloc;
   late final FullyLoadedGameState state;
@@ -26,13 +26,13 @@ class _LessThanTenPageState extends State<LessThanTenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final games = state.gamesWithLessThanTenAchivementsToGo();
+    final games = state.gamesWithMoreThanTenAchievementsToGo();
     return Scaffold(
       key: scaffoldState,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
-          "Better Steam Achievements - ${games.length} games with less than 10 achievements to go",
+          "Better Steam Achievements - ${games.length} games with more than 10 achievements to go",
         ),
         leading: IconButton(
           icon: const Icon(Icons.menu),

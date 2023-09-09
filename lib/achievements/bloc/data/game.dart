@@ -51,6 +51,11 @@ class Game extends Equatable {
     return notCompletedAchievments < 10 && notCompletedAchievments > 0;
   }
 
+  bool hasMoreThanTenAchievements() {
+    final notCompletedAchievments = incompleteAchievements().length;
+    return notCompletedAchievments > 10;
+  }
+
   Achievements incompleteAchievements() {
     return achievements.where((element) => !element.completed).toList();
   }

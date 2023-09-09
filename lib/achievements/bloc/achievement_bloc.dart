@@ -42,6 +42,8 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         final achievements =
             await _repository.getAchievements(credentials, game);
 
+        // Remove the current game from the list, if it has no achievements
+        // then we don't want to store it
         final gamesWithoutCurrentGame = games.where((element) {
           return game.appId != element.appId;
         });

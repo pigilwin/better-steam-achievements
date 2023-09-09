@@ -27,6 +27,10 @@ class _MenuState extends State<Menu> {
     final textTheme = theme.textTheme;
     final gamesWithLessThanTenAchivementsToGo =
         state.gamesWithLessThanTenAchivementsToGo();
+
+    final gamesWithMoreThanTenAchivementsToGo =
+        state.gamesWithMoreThanTenAchievementsToGo();
+
     final children = [
       Text(
         "BSA",
@@ -48,6 +52,18 @@ class _MenuState extends State<Menu> {
           trailing: const Text("10"),
           onTap: () {
             context.go('/less-than-ten');
+          },
+        ),
+      );
+    }
+
+    if (gamesWithMoreThanTenAchivementsToGo.isNotEmpty) {
+      children.add(
+        ListTile(
+          title: const Text("More than 10 Achivements"),
+          trailing: const Text("10"),
+          onTap: () {
+            context.go('/more-than-ten');
           },
         ),
       );

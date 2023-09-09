@@ -1,8 +1,8 @@
 import 'package:better_steam_achievements/achievements/bloc/data/game.dart';
 import 'package:flutter/material.dart';
 
-class LessThanTenGameCard extends StatelessWidget {
-  const LessThanTenGameCard({
+class IncompleteGameCard extends StatelessWidget {
+  const IncompleteGameCard({
     super.key,
     required this.game,
     required this.largeText,
