@@ -39,9 +39,9 @@ class _InformationPageState extends State<InformationPage> {
     // Sort incomplete achievements first
     achievements.sort((Achievement a, Achievement b) {
       if (!a.completed || !b.completed) {
-        return 1;
+        return 0;
       }
-      return 0;
+      return 1;
     });
 
     for (final Achievement achievement in achievements) {
