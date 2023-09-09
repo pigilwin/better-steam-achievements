@@ -80,7 +80,6 @@ class AchievementRepository {
         Game.emptyAchievements(
           applicationId,
           getItem<String>(game, 'name', ''),
-          getItem<String>(game, 'img_icon_url', ''),
           getItem<int>(game, 'playtime_forever', 0),
         ),
       );

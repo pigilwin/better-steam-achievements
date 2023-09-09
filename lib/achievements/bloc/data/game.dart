@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class Game extends Equatable {
   final int appId;
   final String name;
-  final String iconHash;
   final int playTime;
   final bool achievementsFetched;
   final Achievements achievements;
@@ -14,7 +13,6 @@ class Game extends Equatable {
   const Game(
     this.appId,
     this.name,
-    this.iconHash,
     this.playTime,
     this.achievementsFetched,
     this.achievements,
@@ -23,17 +21,15 @@ class Game extends Equatable {
   factory Game.emptyAchievements(
     int appId,
     String name,
-    String iconHash,
     int playTime,
   ) {
-    return Game(appId, name, iconHash, playTime, false, const []);
+    return Game(appId, name, playTime, false, const []);
   }
 
   Game copyWithAchievements(Achievements achievements) {
     return Game(
       appId,
       name,
-      iconHash,
       playTime,
       true,
       achievements,
@@ -77,7 +73,6 @@ class Game extends Equatable {
   List<Object> get props => [
         appId,
         name,
-        iconHash,
         playTime,
         achievementsFetched,
         achievements,
