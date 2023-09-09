@@ -6,10 +6,12 @@ class FullyCompletedGameCard extends StatelessWidget {
     super.key,
     required this.game,
     required this.largeText,
+    required this.clickHandler,
   });
 
   final Game game;
   final bool largeText;
+  final VoidCallback? clickHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +29,46 @@ class FullyCompletedGameCard extends StatelessWidget {
       achievementText = "This game has $achievementCount achievements";
     }
 
+    final children = <Widget>[
+      Container(
+        alignment: Alignment.center,
+        child: Image.network(
+          game.imageUrl(),
+          fit: BoxFit.cover,
+          height: media.size.height,
+          width: media.size.width,
+        ),
+      ),
+      Container(
+        alignment: Alignment.center,
+        child: Image.network(game.logoUrl()),
+      ),
+      Container(
+        alignment: Alignment.bottomCenter,
+        margin: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          achievementText,
+          style: textSize,
+        ),
+      )
+    ];
+
+    if (clickHandler != null) {
+      children.add(
+        Container(
+          alignment: Alignment.bottomRight,
+          margin: const EdgeInsets.only(bottom: 5, right: 5),
+          child: IconButton(
+            icon: const Icon(Icons.edit),
+            color: Colors.white,
+            onPressed: clickHandler,
+          ),
+        ),
+      );
+    }
+
     return Stack(
-      children: [
-        Container(
-          alignment: Alignment.center,
-          child: Image.network(
-            game.imageUrl(),
-            fit: BoxFit.cover,
-            height: media.size.height,
-            width: media.size.width,
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: Image.network(game.logoUrl()),
-        ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          margin: const EdgeInsets.only(bottom: 10),
-          child: Text(
-            achievementText,
-            style: textSize,
-          ),
-        )
-      ],
+      children: children,
     );
   }
 }

@@ -58,4 +58,10 @@ class FullyLoadedGameState extends AchievementState {
       return element.hasMoreThanTenAchievements();
     }).toList();
   }
+
+  Game findGameById(int gameId) {
+    return games.where((element) {
+      return element.appId == gameId;
+    }).first;
+  }
 }

@@ -52,6 +52,7 @@ class _SlideShowState extends State<SlideShow> {
             cardGenerator: (game) => FullyCompletedGameCard(
               game: game,
               largeText: true,
+              clickHandler: null,
             ),
           ),
           floatingActionButton: FloatingActionButton(

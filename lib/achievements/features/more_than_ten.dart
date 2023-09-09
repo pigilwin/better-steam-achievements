@@ -4,6 +4,7 @@ import 'package:better_steam_achievements/achievements/components/incomplete_gam
 import 'package:better_steam_achievements/achievements/components/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MoreThanTenPage extends StatefulWidget {
   const MoreThanTenPage({super.key});
@@ -52,6 +53,9 @@ class _MoreThanTenPageState extends State<MoreThanTenPage> {
       widgets.add(IncompleteGameCard(
         game: game,
         largeText: false,
+        clickHandler: () {
+          context.go('/information/${game.appId}');
+        },
       ));
     }
     return GridView.count(

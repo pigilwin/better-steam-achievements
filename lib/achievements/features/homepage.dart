@@ -76,6 +76,9 @@ class _HomePageState extends State<HomePage> {
       widgets.add(FullyCompletedGameCard(
         game: game,
         largeText: false,
+        clickHandler: () {
+          context.go('/information/${game.appId}');
+        },
       ));
     }
     return GridView.count(
