@@ -96,6 +96,52 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         emit(FullyLoadedGameState(typedState.games));
       }
     });
+
+    on<HideGameEvent>((event, emit) {
+      if (state is FullyLoadedGameState) {
+        final typedState = state as FullyLoadedGameState;
+        final games = typedState.games;
+        final game = event.game;
+
+        // Remove the current game from the list, if it has no achievements
+        // then we don't want to store it
+        final gamesWithoutCurrentGame = games.where((element) {
+          return game.appId != element.appId;
+        });
+
+        _gamesRepository.hideGame(game);
+
+        final gamesWithHidden = List<Game>.from(gamesWithoutCurrentGame);
+        gamesWithHidden.add(game.copyWithHidden());
+        emit(FullyLoadedGameState(gamesWithHidden));
+      }
+    });
+
+    on<RemoveHiddenGameEvent>((event, emit) async {
+      if (state is FullyLoadedGameState) {
+        final typedState = state as FullyLoadedGameState;
+        final games = typedState.games;
+        final game = event.game;
+
+        // Remove the current game from the list, if it has no achievements
+        // then we don't want to store it
+        final gamesWithoutCurrentGame = games.where((element) {
+          return game.appId != element.appId;
+        });
+
+        _gamesRepository.removeGameFromHidden(game);
+
+        final gamesWithHidden = List<Game>.from(gamesWithoutCurrentGame);
+
+        final achievements = await _achievementRepository.getAchievements(
+          _credentialsRepository.credentials,
+          game,
+        );
+
+        gamesWithHidden.add(game.copyWithAchievements(achievements));
+        emit(FullyLoadedGameState(gamesWithHidden));
+      }
+    });
   }
 
   Credentials getCredentials() {

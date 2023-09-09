@@ -21,6 +21,26 @@ class GamesRepository {
     );
   }
 
+  Future<void> hideGame(Game game) async {
+    gamesHidden.add(game.appId);
+    final gamesIds = gamesHidden.map((e) => e.toString()).toList();
+    await preferences.setStringList(
+      'gamesHidden',
+      gamesIds,
+    );
+  }
+
+  Future<void> removeGameFromHidden(Game game) async {
+    gamesHidden = gamesHidden.where((element) {
+      return element != game.appId;
+    }).toList();
+    final gamesIds = gamesHidden.map((e) => e.toString()).toList();
+    await preferences.setStringList(
+      'gamesHidden',
+      gamesIds,
+    );
+  }
+
   bool isGameHidden(Game game) {
     return gamesHidden.contains(game.appId);
   }

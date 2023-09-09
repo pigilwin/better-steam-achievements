@@ -20,3 +20,15 @@ class FetchAchievementForGameEvent extends AchievementEvent {
 class CompleteFetchingAchievementEvent extends AchievementEvent {
   CompleteFetchingAchievementEvent();
 }
+
+class HideGameEvent extends AchievementEvent {
+  final Game game;
+
+  HideGameEvent(this.game);
+}
+
+class RemoveHiddenGameEvent extends AchievementEvent {
+  final Game game;
+
+  RemoveHiddenGameEvent(this.game);
+}

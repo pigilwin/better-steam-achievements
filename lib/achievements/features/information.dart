@@ -100,6 +100,12 @@ class _InformationPageState extends State<InformationPage> {
               setState(() {
                 hidden = changed;
               });
+
+              if (changed) {
+                achievementBloc.add(HideGameEvent(game));
+              } else {
+                achievementBloc.add(RemoveHiddenGameEvent(game));
+              }
             },
           ),
         ),

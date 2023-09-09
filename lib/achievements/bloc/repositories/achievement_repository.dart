@@ -48,7 +48,7 @@ class AchievementRepository {
       return [];
     }
 
-    final achievementInformation = await getAchievementInformation(
+    final achievementInformation = await _getAchievementInformation(
       credentials,
       game,
     );
@@ -79,7 +79,7 @@ class AchievementRepository {
     return achievements;
   }
 
-  Future<AchievementIcons> getAchievementInformation(
+  Future<AchievementIcons> _getAchievementInformation(
     Credentials credentials,
     Game game,
   ) async {
