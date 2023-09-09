@@ -51,6 +51,10 @@ class Game extends Equatable {
   }
 
   bool achievementsCompleted() {
+    if (achievements.isEmpty) {
+      return false;
+    }
+
     final completedAchievementsLength =
         achievements.where((element) => element.completed).length;
     return completedAchievementsLength == achievements.length;

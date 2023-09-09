@@ -8,6 +8,9 @@ class Achievement extends Equatable {
   final String description;
   final bool completed;
   final int unlockTime;
+  final String iconUrl;
+  final String grayIconUrl;
+  final bool hidden;
 
   const Achievement(
     this.id,
@@ -15,6 +18,9 @@ class Achievement extends Equatable {
     this.description,
     this.completed,
     this.unlockTime,
+    this.iconUrl,
+    this.grayIconUrl,
+    this.hidden,
   );
 
   @override
@@ -24,6 +30,9 @@ class Achievement extends Equatable {
         description,
         completed,
         unlockTime,
+        iconUrl,
+        grayIconUrl,
+        hidden,
       ];
 }
 

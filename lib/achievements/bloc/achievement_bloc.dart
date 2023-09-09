@@ -29,7 +29,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
       }
 
       final loadedGames = await _achievementRepository.getGames(credentials);
-      final games = List<Game>.empty();
+      final games = List<Game>.empty(growable: true);
       for (final game in loadedGames) {
         if (_gamesRepository.isGameHidden(game)) {
           games.add(game.copyWithHidden());
@@ -57,12 +57,6 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
         final game = event.game;
 
-        // Fetch the achievements for this game
-        final achievements = await _achievementRepository.getAchievements(
-          _credentialsRepository.credentials,
-          game,
-        );
-
         // Remove the current game from the list, if it has no achievements
         // then we don't want to store it
         final gamesWithoutCurrentGame = games.where((element) {
@@ -72,11 +66,11 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         // Create a new map from the current games
         final newGames = List<Game>.from(gamesWithoutCurrentGame);
 
-        if (_gamesRepository.isGameHidden(game)) {
-          newGames.add(game.copyWithHidden());
-          emit(LoadGamesWithoutAchievementsState(newGames));
-          return;
-        }
+        // Fetch the achievements for this game
+        final achievements = await _achievementRepository.getAchievements(
+          _credentialsRepository.credentials,
+          game,
+        );
 
         // If the game has no achievements then we don't want to keep the game
         if (achievements.isEmpty) {
