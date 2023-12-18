@@ -29,26 +29,21 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
         return;
       }
 
-      final loadedGames = await _achievementRepository.getGames(credentials);
-      final games = List<Game>.empty(growable: true);
-      for (final game in loadedGames) {
-        if (_gamesRepository.isGameHidden(game)) {
-          games.add(game.copyWithHidden());
-        } else {
-          games.add(game);
-        }
-      }
-
       emit(
         LoadGamesWithoutAchievementsState(
-          games,
+          await getGames(credentials),
         ),
       );
     });
 
-    on<SaveCredentialsEvent>((event, emit) {
+    on<SaveCredentialsEvent>((event, emit) async {
       final credentials = Credentials(event.steamId, event.apiKey);
       _credentialsRepository.saveCredentials(credentials);
+      emit(
+        LoadGamesWithoutAchievementsState(
+          await getGames(credentials),
+        ),
+      );
     });
 
     on<FetchAchievementForGameEvent>((event, emit) async {
@@ -147,5 +142,18 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
   Credentials getCredentials() {
     return _credentialsRepository.credentials;
+  }
+
+  Future<List<Game>> getGames(Credentials credentials) async {
+    final loadedGames = await _achievementRepository.getGames(credentials);
+    final games = List<Game>.empty(growable: true);
+    for (final game in loadedGames) {
+      if (_gamesRepository.isGameHidden(game)) {
+        games.add(game.copyWithHidden());
+      } else {
+        games.add(game);
+      }
+    }
+    return games;
   }
 }
