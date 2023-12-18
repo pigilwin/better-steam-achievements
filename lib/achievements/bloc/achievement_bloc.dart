@@ -26,6 +26,7 @@ class AchievementBloc extends Bloc<AchievementEvent, AchievementState> {
 
       if (credentials.isEmpty) {
         emit(FailedToLoadCredentailsState());
+        return;
       }
 
       final loadedGames = await _achievementRepository.getGames(credentials);
