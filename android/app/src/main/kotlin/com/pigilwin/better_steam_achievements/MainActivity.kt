@@ -1,4 +1,4 @@
-package com.example.better_steam_achievements
+package com.pigilwin.better_steam_achievements
 
 import io.flutter.embedding.android.FlutterActivity
 
