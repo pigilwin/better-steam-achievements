@@ -48,9 +48,16 @@ class FullyLoadedGameState extends AchievementState {
   }
 
   Games gamesWithLessThanTenAchivementsToGo() {
-    return games.where((element) {
+    var lessThanThenToGo = games.where((element) {
       return element.hasLessThanTenAchievements();
     }).toList();
+
+    lessThanThenToGo.sort((a, b) {
+      return a.incompleteAchievements().length -
+          b.incompleteAchievements().length;
+    });
+
+    return lessThanThenToGo;
   }
 
   Games gamesWithMoreThanTenAchievementsToGo() {
